@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Peminjaman</title>
+    <title>Peraturan Peminjaman Ruangan & Form Peminjaman</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
         body {
-            background-color: #f1fafb;
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
-            background: #fff;
+            width: 70%;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 50px auto;
         }
 
         h1 {
@@ -28,12 +33,22 @@
             font-weight: bold;
         }
 
+        .title {
+            text-align: center;
+            background-color: #40BFC1;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
         label {
             font-weight: 600;
             color: #40BFC1;
         }
 
-        .form-control {
+        .form-control, .btn-primary {
             border: 2px solid #40BFC1;
             border-radius: 5px;
         }
@@ -47,18 +62,52 @@
             background-color: #359a9c;
         }
 
-        .error-message {
-            color: red;
-            font-weight: bold;
-            text-align: center;
+        .box-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
 
-        .icon-title {
-            margin-right: 8px;
-            color: #40BFC1;
+        .box {
+            background-color: #EAF7F1;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #40BFC1;
+            width: 48%;
+            box-sizing: border-box;
         }
 
-        textarea {
+        ul {
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .form-group .form-control {
+            flex: 2;
+            max-width: 350px;
+        }
+
+        .form-group .form-control1 {
+            flex: 2;
+            width: 350px;
+        }
+        .form-group textarea {
             resize: none;
         }
 
@@ -74,93 +123,123 @@
             padding: 5px;
             border-radius: 5px;
         }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h1>Form Peminjaman Ruang Rapat</h1>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
-    <?php elseif (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
-    <?php endif; ?>
-
-    <form action="<?= base_url('/peminjaman/store') ?>" method="POST">
-        <?= csrf_field() ?>
-
-        <div class="form-group">
-            <label for="ruang_rapat_id"><i class="fas fa-door-open"></i> Pilih Ruangan:</label>
-            <select name="ruang_rapat_id" id="ruang_rapat_id" class="form-control" required>
-                <option value="">Pilih Ruangan</option>
-                <?php foreach ($ruangan as $ruang): ?>
-                    <option value="<?= $ruang['id'] ?>" 
-                            data-kapasitas="<?= $ruang['kapasitas'] ?>" 
-                            data-layouts='<?= json_encode($ruang['layouts']) ?>'>
-                        <?= $ruang['nama_ruangan'] ?> - Kapasitas: <?= $ruang['kapasitas'] ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Ruangan:</label>
-            <input type="text" id="kapasitas" class="form-control" readonly>
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-th-large"></i> Pilihan Layout:</label>
-            <div class="image-preview border p-3" id="layout-options">
-                <p class="text-muted">Silakan pilih ruangan terlebih dahulu.</p>
+    <div class="container">
+        <!-- Peraturan Peminjaman Ruangan Section -->
+        <h1 class="title">Peraturan Peminjaman Ruangan</h1>
+        <div class="box-container">
+            <div class="box">
+                <p>Sebelum mengisi form peminjaman lebih dahulu melihat jadwal ruang rapat untuk mengetahui ruang rapat yang tersedia dan Khusus untuk ruang rapat berikut:</p>
+                <ul>
+                    <li>Ruang Rapat Jungle & Forest ijin terlebih dahulu ke Sdr. Lia, ext 2601</li>
+                    <li>Ruang Rapat Competen & Competitive ijin terlebih dahulu ke Sdr. Irsa ext. 2421</li>
+                    <li>Ruang Rapat Lt.2 Unit3 (Eksekutif) ijin terlebih dahulu ke Sdr. Rini ext. 2401</li>
+                    <li>Ruang Rapat Press / Cyan ijin terlebih dahulu pihak PRESS</li>
+                </ul>
+                <p>Setelah ruang rapat bisa dipinjam, silakan Pemakai mengisi formulir peminjaman ruang rapat yang terdapat di intranet (minimal 2 hari sebelum pelaksanaan), bila peminjamannya mendadak atau 1 hari sebelumnya mohon bantuan untuk memberitahu General Affairs.</p>
+            </div>
+            <div class="box">
+                <p><strong>Saat pengisian tidak lupa mencantumkan:</strong></p>
+                <ul>
+                    <li>Division / Departement</li>
+                    <li>Tanggal / hari rapat</li>
+                    <li>Jumlah peserta rapat</li>
+                    <li>Nama acara</li>
+                    <li>Layout meja yang diinginkan</li>
+                    <li>Peralatan rapat yang dibutuhkan</li>
+                </ul>
+                <p>Bila ada pembatalan pemakaian ruang rapat harap segera diinformasikan ke General Affairs ext. 2501, sehingga ruangan dapat dipakai oleh yang lain.</p>
             </div>
         </div>
+        <br>
+        <h1 class="title">Form Peminjaman Ruang Rapat</h1>
 
-        <div class="form-group">
-            <label for="acara"><i class="fas fa-calendar-check"></i> Acara:</label>
-            <select name="acara" id="acara" class="form-control" required>
-                <option value="internal">Acara Internal</option>
-                <option value="eksternal">Acara Eksternal</option>
-            </select>
-        </div>
+        <form action="<?= base_url('/peminjaman/store') ?>" method="POST">
+            <?= csrf_field() ?>
 
-        <div class="form-group">
-            <label for="keterangan_acara"><i class="fas fa-pencil-alt"></i> Keterangan Acara:</label>
-            <textarea name="keterangan_acara" id="keterangan_acara" class="form-control" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-utensils"></i> Konsumsi:</label>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="konsumsi[]" value="air"> Air</label>
-                <label><input type="checkbox" name="konsumsi[]" value="teh"> Teh</label>
-                <label><input type="checkbox" name="konsumsi[]" value="kopi"> Kopi</label>
-                <label><input type="checkbox" name="konsumsi[]" value="gula"> Gula</label>
-                <label><input type="checkbox" name="konsumsi[]" value="creamer"> Creamer</label>
-                <label><input type="checkbox" name="konsumsi[]" value="kue"> Kue</label>
-                <label><input type="checkbox" name="konsumsi[]" value="lunch"> Lunch</label>
+            <div class="form-group">
+                <label for="tanggal_peminjaman"><i class="fas fa-calendar"></i> Tanggal Peminjaman :</label>
+                <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" required>
             </div>
-            <textarea name="konsumsi_lain" id="konsumsi_lain" class="form-control mt-2" placeholder="Tulis konsumsi tambahan (opsional)"></textarea>
-        </div>
 
-        <div class="form-group">
-            <label for="tanggal_peminjaman"><i class="fas fa-calendar"></i> Tanggal Peminjaman:</label>
-            <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" required>
-        </div>
+            <div class="form-group">
+                <label for="ruang_rapat_id"><i class="fas fa-door-open"></i> Pilih Ruangan :</label>
+                <select name="ruang_rapat_id" id="ruang_rapat_id" class="form-control" required>
+                    <option value="">Pilih Ruangan</option>
+                    <?php foreach ($ruangan as $ruang): ?>
+                        <option value="<?= $ruang['id'] ?>" 
+                                data-kapasitas="<?= $ruang['kapasitas'] ?>" 
+                                data-layouts='<?= json_encode($ruang['layouts']) ?>'>
+                            <?= $ruang['nama_ruangan'] ?> - Kapasitas: <?= $ruang['kapasitas'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
 
-        <div class="form-group">
-            <label for="waktu_mulai"><i class="fas fa-clock"></i> Waktu Mulai:</label>
-            <input type="time" name="waktu_mulai" id="waktu_mulai" class="form-control" required>
-        </div>
+            </div>
 
-        <div class="form-group">
-            <label for="waktu_selesai"><i class="fas fa-clock"></i> Waktu Selesai:</label>
-            <input type="time" name="waktu_selesai" id="waktu_selesai" class="form-control" required>
-        </div>
+            <div class="form-group">
+                <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Ruangan :</label>
+                <input type="text" id="kapasitas" class="form-control" readonly>
 
-        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-        <a href="<?= base_url('/peminjaman') ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
-    </form>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-th-large"></i> Pilihan Layout :</label>
+                <div class="image-preview border p-3" id="layout-options">
+                    <p class="text-muted">Silakan pilih ruangan terlebih dahulu.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="waktu_mulai"><i class="fas fa-clock"></i> Waktu Mulai - Selesai:</label>
+                <input type="time" name="waktu_mulai" id="waktu_mulai" class="form-control"required>
+                
+                <input type="time" name="waktu_selesai" id="waktu_selesai" class="form-control" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="acara"><i class="fas fa-calendar-check"></i> Acara :</label>
+                <select name="acara" id="acara" class="form-control" required>
+                    <option value="internal">Acara Internal</option>
+                    <option value="eksternal">Acara Eksternal</option>
+                </select>
+
+                <textarea name="keterangan_acara" id="keterangan_acara" class="form-control"  placeholder="Keterangan Acara" required ></textarea>
+
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-utensils"></i> Konsumsi :</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="konsumsi[]" value="air"> Air</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="teh"> Teh</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="kopi"> Kopi</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="gula"> Gula</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="creamer"> Creamer</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="kue"> Kue</label>
+                    <label><input type="checkbox" name="konsumsi[]" value="lunch"> Lunch</label>
+                </div>
+                </div>
+                <div class="form-group" style="margin-left: 210px;">
+    <textarea name="konsumsi_lain" id="konsumsi_lain" class="form-control mt-2" placeholder="Tulis konsumsi tambahan (opsional)"></textarea>
 </div>
+
+                    
+
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+            <a href="<?= base_url('/peminjaman') ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
+        </form>
+    </div>
 
 <script>
     document.querySelector('#ruang_rapat_id').addEventListener('change', function () {
@@ -175,6 +254,7 @@
         if (layouts.length > 0) {
             layouts.forEach(layout => {
                 layoutOptions.innerHTML += `
+
                     <label class="mr-3">
                         <input type="radio" name="layout_id" value="${layout.id}" required>
                         <img src="<?= base_url('uploads/') ?>${layout.image_path}" alt="${layout.nama_layout}" class="img-thumbnail">
@@ -187,5 +267,6 @@
         }
     });
 </script>
+
 </body>
 </html>

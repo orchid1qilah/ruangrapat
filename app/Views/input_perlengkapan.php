@@ -172,7 +172,7 @@
                 <i class="fas fa-plus"></i> Tambah Barang
             </button>
 
-            <div class="text-center mt-4">
+            <div class="text -center mt-4">
                 <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="<?= base_url('/perlengkapan') ?>" class="btn btn-secondary">Batal</a>
             </div>

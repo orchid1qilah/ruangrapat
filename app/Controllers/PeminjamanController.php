@@ -10,25 +10,19 @@ use CodeIgniter\Controller;
 class PeminjamanController extends Controller
 {
 
-    public function index()
+ public function index()
     {
         $peminjamanModel = new PeminjamanModel();
         $ruangRapatModel = new RuangRapatModel();
-        $inputLayoutModel = new InputLayoutModel();
     
-        $peminjaman = $peminjamanModel->findAll();
+        $data['peminjaman'] = $peminjamanModel->select('peminjaman.*, ruang_rapat.nama_ruangan, input_layout.nama_layout')
+            ->join('ruang_rapat', 'peminjaman.ruang_rapat_id = ruang_rapat.id', 'left')
+            ->join('input_layout', 'peminjaman.layout_id = input_layout.id', 'left')
+            ->orderBy('peminjaman.tanggal_peminjaman', 'DESC')
+            ->findAll();
     
-        foreach ($peminjaman as &$item) {
-            $ruang = $ruangRapatModel->find($item['ruang_rapat_id']);
-            $layout = $inputLayoutModel->find($item['layout_id']);
-    
-            $item['nama_ruangan'] = $ruang ? $ruang['nama_ruangan'] : 'Unknown';
-            $item['nama_layout'] = $layout ? $layout['nama_layout'] : 'Unknown';
-        }
-    
-        return view('jadwal_rr_all', ['peminjaman' => $peminjaman]);
+        return view('jadwal_rr_all', $data);
     }
-    
 
     public function create()
     {
@@ -53,8 +47,8 @@ class PeminjamanController extends Controller
         $data = [
             'ruangan' => $ruanganWithLayouts,
         ];
-   // return view('jadwal_rr_all', $data);
-       return view('form_peminjaman', $data);
+    
+        return view('form_peminjaman', $data);
     }
     public function store()
     {
