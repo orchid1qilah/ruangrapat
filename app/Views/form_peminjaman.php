@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<?php echo view('header.php');?>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peraturan Peminjaman Ruangan & Form Peminjaman</title>
@@ -11,9 +13,6 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #F8F8F8;
-            margin: 0;
-            padding: 0;
-            display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -134,7 +133,6 @@
 <body>
 
     <div class="container">
-        <!-- Peraturan Peminjaman Ruangan Section -->
         <h1 class="title">Peraturan Peminjaman Ruangan</h1>
         <div class="box-container">
             <div class="box">
@@ -179,17 +177,15 @@
                         <option value="<?= $ruang['id'] ?>" 
                                 data-kapasitas="<?= $ruang['kapasitas'] ?>" 
                                 data-layouts='<?= json_encode($ruang['layouts']) ?>'>
-                            <?= $ruang['nama_ruangan'] ?> - Kapasitas: <?= $ruang['kapasitas'] ?>
+                            <?= $ruang['nama_ruangan'] ?> - Kapasitas : <?= $ruang['kapasitas'] ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-
             </div>
 
             <div class="form-group">
                 <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Ruangan :</label>
                 <input type="text" id="kapasitas" class="form-control" readonly>
-
             </div>
 
             <div class="form-group">
@@ -200,7 +196,7 @@
             </div>
 
             <div class="form-group">
-                <label for="waktu_mulai"><i class="fas fa-clock"></i> Waktu Mulai - Selesai:</label>
+                <label for="waktu_mulai"><i class="fas fa-clock"></i> Waktu Mulai - Selesai :</label>
                 <input type="time" name="waktu_mulai" id="waktu_mulai" class="form-control"required>
                 
                 <input type="time" name="waktu_selesai" id="waktu_selesai" class="form-control" required>
@@ -233,9 +229,6 @@
                 <div class="form-group" style="margin-left: 210px;">
     <textarea name="konsumsi_lain" id="konsumsi_lain" class="form-control mt-2" placeholder="Tulis konsumsi tambahan (opsional)"></textarea>
 </div>
-
-                    
-
             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
             <a href="<?= base_url('/peminjaman') ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
         </form>
@@ -269,4 +262,6 @@
 </script>
 
 </body>
+<?php echo view('footer.php');?>
+
 </html>

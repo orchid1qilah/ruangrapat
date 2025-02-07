@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<?php echo view('header.php');?>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Ruang Rapat</title>
@@ -9,7 +11,6 @@
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
             background-color: #f1fafb;
             color: #333;
         }
@@ -99,6 +100,7 @@
 
 </head>
 <body>
+    <br>
     <h1>Master Ruang Rapat</h1>
     <a href="<?= base_url('/ruangrapat/create') ?>" class="add-button">Input Ruang Rapat</a>
     
@@ -135,5 +137,8 @@
                 <?php endif; ?>
             </tbody>
         </table>
+        <br>
 </body>
+<?php echo view('footer.php');?>
+
 </html>

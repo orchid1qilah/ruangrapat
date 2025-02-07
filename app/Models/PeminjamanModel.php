@@ -17,6 +17,7 @@ class PeminjamanModel extends Model
         'acara',
         'keterangan_acara',
         'konsumsi',
+        'konsumsi_lain',
         'layout_id'
     ];
     protected $useTimestamps = true;

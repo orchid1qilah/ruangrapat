@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/home', 'Home::index');
 
 //routes input layout
 $routes->get('/inputlayout', 'InputLayoutController::index');
@@ -49,9 +49,10 @@ $routes->post('/perlengkapan/update/(:num)', 'PerlengkapanController::update/$1'
 ///$routes->post('peminjaman/store', 'PeminjamanController::store');
 
 // Routes untuk daftar peminjaman
-$routes->get('peminjaman', 'PeminjamanController::index');
+//$routes->get('peminjaman', 'PeminjamanController::index');
 
 // Routes untuk form peminjaman
+$routes->get('peminjaman', 'PeminjamanController::index'); 
 $routes->get('peminjaman/create', 'PeminjamanController::create');
 $routes->post('peminjaman/store', 'PeminjamanController::store');
 

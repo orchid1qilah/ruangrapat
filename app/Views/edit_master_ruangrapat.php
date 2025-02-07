@@ -1,122 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<?php echo view('header.php');?>
+<br>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Ruang Rapat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Poppins", Arial, sans-serif;
             background-color: #f1fafb;
             color: #333;
         }
         .container {
             max-width: 600px;
+            width: 90%;
             background: #fff;
-            padding: 30px;
+            padding: 20px;
+            text-align:left;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h3 {
+
+        h2 {
             color: #40BFC1;
             font-weight: bold;
+            text-align: center;
         }
-        .form-control {
-            border: 1px solid #40BFC1;
-            border-radius: 5px;
+
+        .form-group {
+            margin-bottom: 15px;
         }
+
         .form-group label {
             font-weight: bold;
             color: #40BFC1;
+            display: block;
+            margin-bottom: 5px;
         }
+
+        .form-control,
+        .layout-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #40BFC1;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus,
+        .layout-select:focus {
+            outline: none;
+            border-color: #359a9c;
+            box-shadow: 0 0 5px rgba(64, 191, 193, 0.5);
+        }
+
+        .layout-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+        }
+
         .btn-primary {
             background-color: #40BFC1;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 5px;
+            color: white;
         }
+
         .btn-primary:hover {
-            background-color: #f1fafb;
-            color: #40BFC1;
-            border: 1px solid #40BFC1;
+            background-color: #359a9c;
         }
+
         .btn-secondary {
             background-color: #f1fafb;
             color: #40BFC1;
             border: 1px solid #40BFC1;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 5px;
         }
+
         .btn-secondary:hover {
             background-color: #40BFC1;
-            color: #f1fafb;
+            color: white;
         }
+
         .btn-warning {
             background-color: #f1fafb;
             color: #40BFC1;
             border: 1px solid #40BFC1;
             padding: 5px 10px;
             font-size: 0.9rem;
-            border-radius: 5px;
         }
+
         .btn-warning:hover {
             background-color: #40BFC1;
-            color: #f1fafb;
+            color: white;
         }
-        .layout-select {
-            border: 1px solid #40BFC1;
-            border-radius: 5px;
-        }
-        img {
+
+        .img-preview {
+            width: 100%;
+            max-width: 200px;
             border-radius: 5px;
             border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h3 class="text-center mb-4">Edit Ruang Rapat</h3>
+    <center>
+<h2>Edit Ruang Rapat</h2>
+    <div class="container">
         <form id="ruangRapatForm" action="<?= base_url('ruangrapat/update/' . $ruangRapat['id']) ?>" method="post" enctype="multipart/form-data">
             <?= csrf_field() ?>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
             <div class="form-group">
-                <label>Nama Ruangan:</label>
-                <input type="text" name="nama_ruangan" class="form-control" value="<?= esc($ruangRapat['nama_ruangan']) ?>" required>
+                <label for="nama_ruangan">Nama Ruangan:</label>
+                <input type="text" id="nama_ruangan" name="nama_ruangan" class="form-control" value="<?= esc($ruangRapat['nama_ruangan']) ?>" required>
             </div>
 
             <div class="form-group">
-                <label>Kapasitas:</label>
-                <input type="number" name="kapasitas" class="form-control" value="<?= esc($ruangRapat['kapasitas']) ?>" required>
+                <label for="kapasitas">Kapasitas:</label>
+                <input type="number" id="kapasitas" name="kapasitas" class="form-control" value="<?= esc($ruangRapat['kapasitas']) ?>" required>
             </div>
 
             <div id="layoutContainer">
                 <?php foreach ($selectedLayoutIds as $index => $layoutId): ?>
                     <div class="form-group layout-group" id="layout_group_<?= $index + 1 ?>">
                         <label>Layout Ruangan:</label>
-                        <div class="d-flex">
-                            <select id="layout_id_<?= $index + 1 ?>" name="layout_id[]" class="form-control layout-select" required>
-                                <option value="">Pilih Layout</option>
-                                <?php foreach ($layouts as $layout): ?>
-                                    <option value="<?= $layout['id'] ?>" <?= $layout['id'] == $layoutId ? 'selected' : '' ?>>
-                                        <?= esc($layout['nama_layout']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button type="button" class="btn btn-warning btn-sm ml-2" onclick="removeLayout(<?= $index + 1 ?>)">Batal</button>
-                        </div>
+                        <select id="layout_id_<?= $index + 1 ?>" name="layout_id[]" class="layout-select" required>
+                            <option value="">Pilih Layout</option>
+                            <?php foreach ($layouts as $layout): ?>
+                                <option value="<?= $layout['id'] ?>" <?= $layout['id'] == $layoutId ? 'selected' : '' ?>>
+                                    <?= esc($layout['nama_layout']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button type="button" class="btn btn-warning" onclick="removeLayout(<?= $index + 1 ?>)">Batal</button>
                     </div>
                 <?php endforeach; ?>
             </div>
 
-            <div class="text-right mt-3">
+            <div class="text-right">
                 <button type="button" class="btn btn-primary" id="btnTambah">Tambah Layout Baru</button>
             </div>
 
-            <div class="text-center mt-4">
+            <div class="text-center">
                 <button type="submit" class="btn btn-primary">Update</button>
                 <a href="<?= base_url('/ruangrapat/list') ?>" class="btn btn-secondary">Batal</a>
             </div>
@@ -127,62 +171,44 @@
         let layoutIndex = <?= count($selectedLayoutIds) ?>;
 
         // Tambah Layout Baru
-        $('#btnTambah').on('click', function () {
+        document.getElementById('btnTambah').addEventListener('click', function () {
             layoutIndex++;
-            const layoutGroup = `
-                <div class="form-group layout-group" id="layout_group_${layoutIndex}">
-                    <label>Layout Ruangan:</label>
-                    <div class="d-flex">
-                        <select id="layout_id_${layoutIndex}" name="layout_id[]" class="form-control layout-select" onchange="loadgambar(this);" required>
-                            <option value="">Pilih Layout</option>
-                            <?php foreach ($layouts as $layout): ?>
-                                <option value="<?= $layout['id'] ?>"><?= esc($layout['nama_layout']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="button" class="btn btn-warning btn-sm ml-2" onclick="removeLayout(${layoutIndex})">Batal</button>
-                    </div>
-                    <div class="form-group mt-2">
-                        <img id="imglayout_${layoutIndex}" src="<?= base_url('img/noimage.jpg') ?>" style="width: 100%; max-width: 200px;">
-                    </div>
-                </div>`;
-            $('#layoutContainer').append(layoutGroup);
+            const layoutGroup = document.createElement('div');
+            layoutGroup.classList.add('form-group', 'layout-group');
+            layoutGroup.id = `layout_group_${layoutIndex}`;
+            layoutGroup.innerHTML = `
+                <label>Layout Ruangan:</label>
+                <select id="layout_id_${layoutIndex}" name="layout_id[]" class="layout-select" required>
+                    <option value="">Pilih Layout</option>
+                    <?php foreach ($layouts as $layout): ?>
+                        <option value="<?= $layout['id'] ?>"><?= esc($layout['nama_layout']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="button" class="btn btn-warning" onclick="removeLayout(${layoutIndex})">Batal</button>
+            `;
+            document.getElementById('layoutContainer').appendChild(layoutGroup);
         });
-
-        // Load gambar berdasarkan layout yang dipilih
-        function loadgambar(selectElement) {
-            const layoutId = selectElement.value;
-            const layoutIndex = selectElement.id.split('_')[2];
-            $.ajax({
-                url: "<?= base_url('ruangrapat/show') ?>/" + layoutId,
-                type: "GET",
-                dataType: "JSON",
-                success: function (data) {
-                    $(`#imglayout_${layoutIndex}`).attr('src', data.path);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Error json: " + errorThrown);
-                }
-            });
-        }
 
         // Hapus Layout
         function removeLayout(index) {
-            const layoutCount = $('.layout-group').length;
+            const layoutCount = document.querySelectorAll('.layout-group').length;
             if (layoutCount > 1) {
-                $(`#layout_group_${index}`).remove();
+                document.getElementById(`layout_group_${index}`).remove();
             } else {
                 alert('Minimal satu layout harus dipilih.');
             }
         }
 
         // Validasi Form
-        $('#ruangRapatForm').on('submit', function () {
-            const layoutCount = $('.layout-group').length;
+        document.getElementById('ruangRapatForm').addEventListener('submit', function (event) {
+            const layoutCount = document.querySelectorAll('.layout-group').length;
             if (layoutCount < 1) {
                 alert('Minimal satu layout harus dipilih.');
-                return false;
+                event.preventDefault();
             }
         });
     </script>
 </body>
+
+<?php echo view('footer.php');?>
 </html>

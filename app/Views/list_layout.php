@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<?php echo view('header.php');?>
+<br>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Layout Ruang Rapat</title>
@@ -8,7 +10,6 @@
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
             background-color: #f1fafb;
             color: #333;
         }
@@ -141,4 +142,5 @@
         </tbody>
     </table>
 </body>
+<?php echo view('footer.php');?>
 </html>
