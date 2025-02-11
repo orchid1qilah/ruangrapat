@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2025 at 09:36 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Feb 07, 2025 at 09:37 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -77,7 +77,8 @@ INSERT INTO `input_layout` (`id`, `nama_layout`, `image_path`, `created_at`) VAL
 (19, 'Persegi Berhadapan', 'Persegi Berhadapan.png', '2024-12-27 04:08:57'),
 (20, 'Sejajar 3', 'Sejajar 3.png', '2024-12-27 04:23:29'),
 (22, 'Classroom Sitting', 'Classroom Sitting.png', '2025-01-20 08:00:50'),
-(23, 'Business Meeting', 'Business Meeting.png', '2025-01-28 04:09:27');
+(23, 'Business Meeting', 'Business Meeting.png', '2025-01-28 04:09:27'),
+(24, 'test', 'WaysWorking.png', '2025-02-06 09:23:45');
 
 -- --------------------------------------------------------
 
@@ -121,6 +122,13 @@ CREATE TABLE `peminjaman` (
   `layout_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `peminjaman`
+--
+
+INSERT INTO `peminjaman` (`id`, `ruang_rapat_id`, `kapasitas`, `tanggal_peminjaman`, `waktu_mulai`, `waktu_selesai`, `acara`, `keterangan_acara`, `konsumsi`, `layout_id`, `created_at`) VALUES
+(5, 28, 25, '2025-02-05', '10:00:00', '12:00:00', 'internal', 'Rapat Divisi', 'Kopi, Teh, Snack', 14, '2025-02-04 16:55:59');
 
 -- --------------------------------------------------------
 
@@ -167,7 +175,7 @@ CREATE TABLE `ruang_rapat` (
 --
 
 INSERT INTO `ruang_rapat` (`id`, `nama_ruangan`, `kapasitas`) VALUES
-(28, 'Cave', 25),
+(28, 'Cave', 50),
 (29, 'Creovation', 20),
 (30, 'Lab', 10),
 (31, 'Afee', 60),
@@ -190,10 +198,6 @@ CREATE TABLE `ruang_rapat_layout` (
 --
 
 INSERT INTO `ruang_rapat_layout` (`id`, `ruang_rapat_id`, `layout_id`) VALUES
-(14, 28, 14),
-(15, 28, 20),
-(16, 28, 19),
-(17, 28, 22),
 (18, 29, 19),
 (19, 29, 14),
 (20, 30, 18),
@@ -202,7 +206,10 @@ INSERT INTO `ruang_rapat_layout` (`id`, `ruang_rapat_id`, `layout_id`) VALUES
 (23, 31, 14),
 (24, 31, 20),
 (25, 32, 19),
-(26, 32, 22);
+(26, 32, 22),
+(43, 28, 14),
+(44, 28, 20),
+(45, 28, 23);
 
 -- --------------------------------------------------------
 
@@ -297,7 +304,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `input_layout`
 --
 ALTER TABLE `input_layout`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `layouts`
@@ -309,7 +316,7 @@ ALTER TABLE `layouts`
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `perlengkapan`
@@ -321,13 +328,13 @@ ALTER TABLE `perlengkapan`
 -- AUTO_INCREMENT for table `ruang_rapat`
 --
 ALTER TABLE `ruang_rapat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `ruang_rapat_layout`
 --
 ALTER TABLE `ruang_rapat_layout`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -349,8 +356,8 @@ ALTER TABLE `images`
 -- Constraints for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  ADD CONSTRAINT `peminjaman_ibfk_1` FOREIGN KEY (`ruang_rapat_id`) REFERENCES `ruang_rapat` (`id`),
-  ADD CONSTRAINT `peminjaman_ibfk_2` FOREIGN KEY (`layout_id`) REFERENCES `input_layout` (`id`);
+  ADD CONSTRAINT `peminjaman_ibfk_1` FOREIGN KEY (`ruang_rapat_id`) REFERENCES `ruang_rapat` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `peminjaman_ibfk_2` FOREIGN KEY (`layout_id`) REFERENCES `input_layout` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `perlengkapan`
