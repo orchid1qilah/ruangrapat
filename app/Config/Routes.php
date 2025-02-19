@@ -41,19 +41,13 @@ $routes->post('/perlengkapan/store', 'PerlengkapanController::store');
 $routes->get('/perlengkapan/edit/(:num)', 'PerlengkapanController::edit/$1');
 $routes->post('/perlengkapan/update/(:num)', 'PerlengkapanController::update/$1');
 
-
-
-
 //Routes u Form Peminjaman 
 //$routes->get('peminjaman', 'PeminjamanController::create');
 ///$routes->post('peminjaman/store', 'PeminjamanController::store');
 
-// Routes untuk daftar peminjaman
-//$routes->get('peminjaman', 'PeminjamanController::index');
-
 // Routes untuk form peminjaman
-$routes->get('peminjaman', 'PeminjamanController::index'); 
-$routes->get('peminjaman/create', 'PeminjamanController::create');
-$routes->post('peminjaman/store', 'PeminjamanController::store');
+$routes->post('/peminjaman/store', 'PeminjamanController::store');
+$routes->get('/peminjaman', 'PeminjamanController::index'); 
+$routes->get('/peminjaman/create', 'PeminjamanController::create');
 
 $routes->setAutoRoute(false);

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header Ruang Rapat</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -99,7 +98,6 @@
         <div class="logo">Ruang Rapat</div>
         <div class="nav">
         <a href="<?= base_url('peminjaman/create'); ?>" class="nav-item">Form</a>
-
 
             <div class="nav-item">
                 Jadwal &#9662;

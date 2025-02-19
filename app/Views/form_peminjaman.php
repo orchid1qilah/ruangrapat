@@ -131,7 +131,7 @@
     </style>
 </head>
 <body>
-
+<br>
     <div class="container">
         <h1 class="title">Peraturan Peminjaman Ruangan</h1>
         <div class="box-container">
@@ -165,7 +165,7 @@
             <?= csrf_field() ?>
 
             <div class="form-group">
-                <label for="tanggal_peminjaman"><i class="fas fa-calendar"></i> Tanggal Peminjaman :</label>
+                <label for="tanggal_peminjaman"><i class="fas fa-calendar"></i>Tanggal Peminjaman :</label>
                 <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" required>
             </div>
 
@@ -185,7 +185,7 @@
 
             <div class="form-group">
                 <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Ruangan :</label>
-                <input type="text" id="kapasitas" class="form-control" readonly>
+                <input type="text" id="kapasitas" name="kapasitas" class="form-control" readonly>
             </div>
 
             <div class="form-group">
@@ -230,7 +230,7 @@
     <textarea name="konsumsi_lain" id="konsumsi_lain" class="form-control mt-2" placeholder="Tulis konsumsi tambahan (opsional)"></textarea>
 </div>
             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-            <a href="<?= base_url('/peminjaman') ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
+            <button type="reset" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Batal</a>
         </form>
     </div>
 

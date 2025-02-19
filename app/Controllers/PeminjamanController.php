@@ -51,41 +51,73 @@ class PeminjamanController extends Controller
         return view('form_peminjaman', $data);
     }
     public function store()
-    {
-        helper(['form', 'url']);
-    
-        $validationRules = [
-            'ruang_rapat_id'     => 'required|integer',
-            'kapasitas'          => 'required|integer|greater_than[0]',
-            'tanggal_peminjaman' => 'required|valid_date',
-            'waktu_mulai'        => 'required',
-            'waktu_selesai'      => 'required|greater_than_field[waktu_mulai]',
-            'acara'              => 'required|in_list[internal,eksternal]',
-            'keterangan_acara'   => 'required',
-            'layout_id'          => 'required|integer',
-        ];
-    
-        if (!$this->validate($validationRules)) {
-            return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
-        }
-    
-        $data = [
-            'ruang_rapat_id'     => $this->request->getPost('ruang_rapat_id'),
-            'kapasitas'          => $this->request->getPost('kapasitas'),
-            'tanggal_peminjaman' => $this->request->getPost('tanggal_peminjaman'),
-            'waktu_mulai'        => $this->request->getPost('waktu_mulai'),
-            'waktu_selesai'      => $this->request->getPost('waktu_selesai'),
-            'acara'              => $this->request->getPost('acara'),
-            'keterangan_acara'   => $this->request->getPost('keterangan_acara'),
-            'konsumsi'           => implode(',', $this->request->getPost('konsumsi') ?? []),
-            'konsumsi_lain'      => $this->request->getPost('konsumsi_lain'),
-            'layout_id'          => $this->request->getPost('layout_id'),
-        ];
-    
-        $peminjamanModel = new PeminjamanModel();
-        $peminjamanModel->insert($data);
-    
-        return redirect()->to('/peminjaman')->with('success', 'Peminjaman berhasil disimpan.');
+{
+    helper(['form', 'url']);
+
+    $validationRules = [
+        'ruang_rapat_id'     => 'required|integer',
+        'kapasitas'          => 'required|integer|greater_than[0]',
+        'tanggal_peminjaman' => 'required|valid_date',
+        'waktu_mulai'        => 'required|valid_date',
+        'waktu_selesai'      => 'required|valid_date|greater_than_field[waktu_mulai]',
+        'acara'              => 'required|in_list[internal,eksternal]',
+        'keterangan_acara'   => 'required',
+        'layout_id'          => 'required|integer',
+    ];
+
+    try {
+            //code...
+                //throw $th;
+
+            $ruangRapatId = $this->request->getPost('ruang_rapat_id');
+            $kapasitas = $this->request->getPost('kapasitas');
+            $tanggal_peminjaman = $this->request->getPost('tanggal_peminjaman');
+            $waktu_mulai = $this->request->getPost('waktu_mulai');
+            $waktu_selesai = $this->request->getPost('waktu_selesai');
+            $acara = $this->request->getPost('acara');
+            $keterangan_acara = $this->request->getPost('keterangan_acara');
+            $layout_id = $this->request->getPost('layout_id');
+            $konsumsi = $this->request->getPost('konsumsi');
+            $konsumsi_lain = $this->request->getPost('konsumsi_lain');
+
+            // echo $ruangRapatId;
+            // die();
+
+            // Validate the form data
+            // if (!$this->validate($validationRules)) {
+            //     // Join the errors into a single string and display them
+            //     echo implode('<br>', $this->validator->getErrors());
+            //     die(); // Stop further processing on error
+            //     return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+            // }
+            
+            // Prepare the data to be inserted into the database
+            $data = [
+                'ruang_rapat_id'     => $ruangRapatId,
+                'kapasitas'          => $kapasitas,
+                'tanggal_peminjaman' => $tanggal_peminjaman,
+                'waktu_mulai'        => $waktu_mulai,
+                'waktu_selesai'      => $waktu_selesai,
+                'acara'              => $acara,
+                'keterangan_acara'   => $keterangan_acara,
+                'konsumsi'           => is_array($konsumsi) ? implode(',', $konsumsi) : '', // Ensure it's an array before imploding
+                'konsumsi_lain'      => $konsumsi_lain,
+                'layout_id'          => $layout_id,
+            ];
+
+            // Load the model and insert the data into the database
+            $peminjamanModel = new PeminjamanModel();
+            if ($peminjamanModel->insert($data)) {
+                return redirect()->to('/peminjaman')->with('success', 'Peminjaman berhasil disimpan.');
+            } else {
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data.')->withInput();
+            }
+        } catch (\Exception $e) {
+            echo $e;
+            die();
     }
+
+}
+
     
 }
