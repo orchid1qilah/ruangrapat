@@ -87,7 +87,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Ruangan</th>
-                    <th>Kapasitas</th>
+                    <th>Jumlah Peserta</th>
                     <th>Tanggal</th>
                     <th>Waktu</th>
                     <th>Acara</th>
@@ -96,24 +96,26 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($peminjaman)): ?>
-                    <tr>
-                        <td colspan="8" style="text-align: center;">Tidak ada data peminjaman.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php $no = 1; foreach ($peminjaman as $item): ?>
-                        <tr>
-                            <td><?= $no++ ?></td>
-                            <td><?= esc($item['nama_ruangan']) ?></td>
-                            <td><?= esc($item['kapasitas']) ?></td>
-                            <td><?= esc($item['tanggal_peminjaman']) ?></td>
-                            <td><?= esc($item['waktu_mulai']) ?> - <?= esc($item['waktu_selesai']) ?></td>
-                            <td><?= esc($item['acara']) ?> - <?= esc($item['keterangan_acara']) ?></td>
-                            <td><?= esc($item['konsumsi']) ?: '-' ?></td>
-                            <td><?= esc($item['nama_layout']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+    <?php if (empty($peminjaman)): ?>
+        <tr>
+            <td colspan="8" style="text-align: center;">Tidak ada data peminjaman.</td>
+        </tr>
+    <?php else: ?>
+        <?php $no = 1; foreach ($peminjaman as $item): ?>
+            <tr>
+                <td><?= $no++ ?></td>
+                <td><?= esc($item['nama_ruangan']) ?></td>
+                <td><?= esc($item['jumlah_peserta']) ?></td> 
+                <td><?= esc($item['tanggal_peminjaman']) ?></td>
+                <td><?= esc($item['waktu_mulai']) ?> - <?= esc($item['waktu_selesai']) ?></td>
+                <td><?= esc($item['acara']) ?> - <?= esc($item['keterangan_acara']) ?></td>
+                <td><?= esc($item['konsumsi']) ?: '-' ?></td>
+                <td><?= esc($item['nama_layout']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</tbody>
+
             </tbody>
         </table>
 

@@ -170,23 +170,30 @@
             </div>
 
             <div class="form-group">
-                <label for="ruang_rapat_id"><i class="fas fa-door-open"></i> Pilih Ruangan :</label>
-                <select name="ruang_rapat_id" id="ruang_rapat_id" class="form-control" required>
-                    <option value="">Pilih Ruangan</option>
-                    <?php foreach ($ruangan as $ruang): ?>
-                        <option value="<?= $ruang['id'] ?>" 
-                                data-kapasitas="<?= $ruang['kapasitas'] ?>" 
-                                data-layouts='<?= json_encode($ruang['layouts']) ?>'>
-                            <?= $ruang['nama_ruangan'] ?> - Kapasitas : <?= $ruang['kapasitas'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+    <label for="ruang_rapat_id"><i class="fas fa-door-open"></i> Pilih Ruangan :</label>
+    <select name="ruang_rapat_id" id="ruang_rapat_id" class="form-control" required>
+        <option value="">Pilih Ruangan</option>
+        <?php foreach ($ruangan as $ruang): ?>
+            <option value="<?= $ruang['id'] ?>" 
+                    data-kapasitas="<?= $ruang['kapasitas'] ?>" 
+                    data-layouts='<?= json_encode($ruang['layouts']) ?>'>
+                <?= $ruang['nama_ruangan'] ?> - Kapasitas : <?= $ruang['kapasitas'] ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
-            <div class="form-group">
-                <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Ruangan :</label>
-                <input type="text" id="kapasitas" name="kapasitas" class="form-control" readonly>
-            </div>
+<div class="form-group">
+    <label for="kapasitas"><i class="fas fa-users"></i> Kapasitas Maksimal :</label>
+    <input type="text" id="kapasitas" name="kapasitas" class="form-control" readonly>
+</div>
+
+<div class="form-group">
+    <label for="jumlah_peserta"><i class="fas fa-user-plus"></i> Jumlah Peserta :</label>
+    <input type="number" id="jumlah_peserta" name="jumlah_peserta" class="form-control" min="1" required>
+    <small id="kapasitas-error" class="text-danger" style="display:none;">Jumlah peserta melebihi kapasitas maksimal!</small>
+</div>
+
 
             <div class="form-group">
                 <label><i class="fas fa-th-large"></i> Pilihan Layout :</label>
@@ -234,11 +241,16 @@
         </form>
     </div>
 
-<script>
+    <script>
     document.querySelector('#ruang_rapat_id').addEventListener('change', function () {
         const selectedOption = this.options[this.selectedIndex];
         const kapasitas = selectedOption.getAttribute('data-kapasitas');
         document.querySelector('#kapasitas').value = kapasitas;
+        document.querySelector('#jumlah_peserta').max = kapasitas;
+
+        // Reset input jumlah peserta saat ruangan diganti
+        document.querySelector('#jumlah_peserta').value = '';
+        document.querySelector('#kapasitas-error').style.display = 'none';
 
         const layoutOptions = document.querySelector('#layout-options');
         layoutOptions.innerHTML = ''; 
@@ -247,7 +259,6 @@
         if (layouts.length > 0) {
             layouts.forEach(layout => {
                 layoutOptions.innerHTML += `
-
                     <label class="mr-3">
                         <input type="radio" name="layout_id" value="${layout.id}" required>
                         <img src="<?= base_url('uploads/') ?>${layout.image_path}" alt="${layout.nama_layout}" class="img-thumbnail">
@@ -259,7 +270,22 @@
             layoutOptions.innerHTML = '<p class="text-muted">Tidak ada layout tersedia untuk ruangan ini.</p>';
         }
     });
+
+    document.querySelector('#jumlah_peserta').addEventListener('input', function () {
+        const maxKapasitas = parseInt(document.querySelector('#kapasitas').value);
+        const jumlahPeserta = parseInt(this.value);
+        const errorText = document.querySelector('#kapasitas-error');
+
+        if (jumlahPeserta > maxKapasitas) {
+            errorText.style.display = 'block';
+            this.setCustomValidity('Jumlah peserta tidak boleh melebihi kapasitas maksimal');
+        } else {
+            errorText.style.display = 'none';
+            this.setCustomValidity('');
+        }
+    });
 </script>
+
 
 </body>
 <?php echo view('footer.php');?>

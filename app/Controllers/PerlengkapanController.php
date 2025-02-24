@@ -58,7 +58,7 @@ class PerlengkapanController extends Controller
             ]);
         }
 
-        return redirect()->to('/perlengkapan')->with('success', 'Data perlengkapan berhasil disimpan.');
+        return reidrect()->to('/perlengkapan')->with('success', 'Data perlengkapan berhasil disimpan.');
     }
 
     //function u edit

@@ -66,11 +66,11 @@ class PeminjamanController extends Controller
     ];
 
     try {
-            //code...
                 //throw $th;
 
             $ruangRapatId = $this->request->getPost('ruang_rapat_id');
             $kapasitas = $this->request->getPost('kapasitas');
+            $jumlah_peserta = $this->request->getPost('jumlah_peserta');
             $tanggal_peminjaman = $this->request->getPost('tanggal_peminjaman');
             $waktu_mulai = $this->request->getPost('waktu_mulai');
             $waktu_selesai = $this->request->getPost('waktu_selesai');
@@ -91,10 +91,10 @@ class PeminjamanController extends Controller
             //     return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
             // }
             
-            // Prepare the data to be inserted into the database
             $data = [
                 'ruang_rapat_id'     => $ruangRapatId,
                 'kapasitas'          => $kapasitas,
+                'jumlah_peserta'     => $jumlah_peserta,
                 'tanggal_peminjaman' => $tanggal_peminjaman,
                 'waktu_mulai'        => $waktu_mulai,
                 'waktu_selesai'      => $waktu_selesai,
@@ -105,7 +105,6 @@ class PeminjamanController extends Controller
                 'layout_id'          => $layout_id,
             ];
 
-            // Load the model and insert the data into the database
             $peminjamanModel = new PeminjamanModel();
             if ($peminjamanModel->insert($data)) {
                 return redirect()->to('/peminjaman')->with('success', 'Peminjaman berhasil disimpan.');
@@ -116,7 +115,6 @@ class PeminjamanController extends Controller
             echo $e;
             die();
     }
-
 }
 
     

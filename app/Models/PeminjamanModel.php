@@ -11,6 +11,7 @@ class PeminjamanModel extends Model
     protected $allowedFields = [
         'ruang_rapat_id', 
         'kapasitas',
+        'jumlah_peserta',
         'tanggal_peminjaman',
         'waktu_mulai',
         'waktu_selesai',
