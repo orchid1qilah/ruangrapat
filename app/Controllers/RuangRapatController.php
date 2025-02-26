@@ -16,163 +16,187 @@ class RuangRapatController extends Controller
     //function create
     public function create()
     {
-        $db = \Config\Database::connect();
-        $layouts = $db->table('input_layout')->get()->getResultArray();
-        return view('input_ruangrapat', ['layouts' => $layouts]);
+        try {
+            $db = \Config\Database::connect();
+            $layouts = $db->table('input_layout')->get()->getResultArray();
+            return view('input_ruangrapat', ['layouts' => $layouts]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     //function store
     public function store()
     {
-        helper(['form', 'url']);
-    
-        // Validasi Input
-        $validationRules = [
-            'nama_ruangan' => 'required|string|max_length[255]',
-            'kapasitas'    => 'required|integer|greater_than[0]',
-            'layout_id'    => 'required',
-        ];
-    
-        if (!$this->validate($validationRules)) {
-            return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+        try {
+            helper(['form', 'url']);
+
+            // Validasi Input
+            $validationRules = [
+                'nama_ruangan' => 'required|string|max_length[255]',
+                'kapasitas'    => 'required|integer|greater_than[0]',
+                'layout_id'    => 'required',
+            ];
+
+            if (!$this->validate($validationRules)) {
+                return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+            }
+
+            $nama_ruangan = $this->request->getPost('nama_ruangan');
+            $kapasitas = $this->request->getPost('kapasitas');
+            $layout_ids = $this->request->getPost('layout_id');
+
+            $db = \Config\Database::connect();
+
+            $ruangRapatModel = new RuangRapatModel();
+            $ruangRapatId = $ruangRapatModel->insert([
+                'nama_ruangan' => $nama_ruangan,
+                'kapasitas'    => $kapasitas,
+            ]);
+
+            if (!$ruangRapatId) {
+                return redirect()->back()->with('error', 'Gagal menyimpan ruang rapat!')->withInput();
+            }
+
+            foreach ($layout_ids as $layout_id) {
+                $db->table('ruang_rapat_layout')->insert([
+                    'ruang_rapat_id' => $ruangRapatId,
+                    'layout_id'      => $layout_id,
+                ]);
+            }
+
+            return redirect()->to('/ruangrapat/list')->with('success', 'Data Ruang Rapat berhasil disimpan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
-    
-        // Ambil data dari form    
-        $nama_ruangan = $this->request->getPost('nama_ruangan');
-        $kapasitas = $this->request->getPost('kapasitas');
-        $layout_ids = $this->request->getPost('layout_id');
-    
-        $db = \Config\Database::connect();
-    
-        // Simpan data ruang rapat
-        $ruangRapatModel = new \App\Models\RuangRapatModel();
-        $ruangRapatId = $ruangRapatModel->insert([
-            'nama_ruangan' => $nama_ruangan,
-            'kapasitas'    => $kapasitas,
-        ]);
-        
-        if (!$ruangRapatId) {
-        return redirect()->back()->with('error', 'Gagal menyimpan ruang rapat!')->withInput();
     }
 
-    //sv data lay yg di pilih
-    foreach ($layout_ids as $layout_id) {
-    $db->table('ruang_rapat_layout')->insert([
-        'ruang_rapat_id' => $ruangRapatId,
-        'layout_id'      => $layout_id,
-    ]);
-}
-        return redirect()->to('/ruangrapat/list')->with('success', 'Data Ruang Rapat berhasil disimpan.');
-    } 
-    
     //function list
     public function list()
     {
-        $db = \Config\Database::connect();
-    
-        $query = $db->table('ruang_rapat')
-        ->select('ruang_rapat.id, ruang_rapat.nama_ruangan, ruang_rapat.kapasitas, GROUP_CONCAT(input_layout.nama_layout SEPARATOR ", ") as nama_layout')
-        ->join('ruang_rapat_layout', 'ruang_rapat.id = ruang_rapat_layout.ruang_rapat_id', 'left')
-        ->join('input_layout', 'ruang_rapat_layout.layout_id = input_layout.id', 'left')
-        ->groupBy('ruang_rapat.id')
-        ->get();
-        $data['ruang_rapat'] = $query->getResultArray();
+        try {
+            $db = \Config\Database::connect();
 
-        if (empty($data['ruang_rapat'])) {
-            return redirect()->to('/ruangrapat/list')->with('error', 'Data ruang rapat tidak ditemukan!');
+            $query = $db->table('ruang_rapat')
+                ->select('ruang_rapat.id, ruang_rapat.nama_ruangan, ruang_rapat.kapasitas, GROUP_CONCAT(input_layout.nama_layout SEPARATOR ", ") as nama_layout')
+                ->join('ruang_rapat_layout', 'ruang_rapat.id = ruang_rapat_layout.ruang_rapat_id', 'left')
+                ->join('input_layout', 'ruang_rapat_layout.layout_id = input_layout.id', 'left')
+                ->groupBy('ruang_rapat.id')
+                ->get();
+
+            $data['ruang_rapat'] = $query->getResultArray();
+
+            if (empty($data['ruang_rapat'])) {
+                return redirect()->to('/ruangrapat/list')->with('error', 'Data ruang rapat tidak ditemukan!');
+            }
+
+            return view('list_master_ruangrapat', $data);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        
-      //  $data['ruang_rapat'] = $query->getResultArray();
-        return view('list_master_ruangrapat', $data);
     }
 
     //function show
     public function show($id)
     {
-        $model = new InputLayoutModel();
-        $data = $model->getLayout($id);
+        try {
+            $model = new InputLayoutModel();
+            $data = $model->getLayout($id);
 
-        echo json_encode(array("path" => base_url('uploads/' . $data['image_path'])));
+            echo json_encode(["path" => base_url('uploads/' . $data['image_path'])]);
+        } catch (\Exception $e) {
+            echo json_encode(["error" => "Terjadi kesalahan: " . $e->getMessage()]);
+        }
     }
 
     //function delete
     public function delete($id)
     {
-        $model = new RuangRapatModel();
+        try {
+            $model = new RuangRapatModel();
 
-        if ($model->find($id)) {
-            $model->delete($id);
-            return redirect()->to('/ruangrapat/list')->with('success', 'Ruang Rapat berhasil dihapus');
-        } 
+            if ($model->find($id)) {
+                $model->delete($id);
+                return redirect()->to('/ruangrapat/list')->with('success', 'Ruang Rapat berhasil dihapus');
+            } else {
+                return redirect()->to('/ruangrapat/list')->with('error', 'Data tidak ditemukan!');
+            }
+        } catch (\Exception $e) {
+            return redirect()->to('/ruangrapat/list')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
-//function edit
-public function edit($id)
-{
-    $db = \Config\Database::connect();
+    //function edit
+    public function edit($id)
+    {
+        try {
+            $db = \Config\Database::connect();
+            $ruangRapatModel = new RuangRapatModel();
+            $ruangRapat = $ruangRapatModel->find($id);
 
-    
-    $ruangRapatModel = new \App\Models\RuangRapatModel();
-    $ruangRapat = $ruangRapatModel->find($id);
+            if (!$ruangRapat) {
+                return redirect()->to('/ruangrapat/list')->with('error', 'Data ruang rapat tidak ditemukan!');
+            }
 
-    if (!$ruangRapat) {
-        return redirect()->to('/ruangrapat/list')->with('error', 'Data ruang rapat tidak ditemukan!');
+            $layouts = $db->table('input_layout')->get()->getResultArray();
+
+            $selectedLayouts = $db->table('ruang_rapat_layout')
+                ->where('ruang_rapat_id', $id)
+                ->get()
+                ->getResultArray();
+
+            $selectedLayoutIds = array_column($selectedLayouts, 'layout_id');
+
+            return view('edit_master_ruangrapat', [
+                'ruangRapat' => $ruangRapat,
+                'layouts' => $layouts,
+                'selectedLayoutIds' => $selectedLayoutIds,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
-    $layouts = $db->table('input_layout')->get()->getResultArray();
+    //function update
+    public function update($id)
+    {
+        try {
+            helper(['form', 'url']);
 
-   
-    $selectedLayouts = $db->table('ruang_rapat_layout')
-        ->where('ruang_rapat_id', $id)
-        ->get()
-        ->getResultArray();
+            $validationRules = [
+                'nama_ruangan' => 'required|string|max_length[255]',
+                'kapasitas'    => 'required|integer|greater_than[0]',
+                'layout_id'    => 'required',
+            ];
 
-    $selectedLayoutIds = array_column($selectedLayouts, 'layout_id');
+            if (!$this->validate($validationRules)) {
+                return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+            }
 
-    return view('edit_master_ruangrapat', [
-        'ruangRapat' => $ruangRapat,
-        'layouts' => $layouts,
-        'selectedLayoutIds' => $selectedLayoutIds,
-    ]);
-}
+            $nama_ruangan = $this->request->getPost('nama_ruangan');
+            $kapasitas = $this->request->getPost('kapasitas');
+            $layout_ids = $this->request->getPost('layout_id');
 
-//function update
-public function update($id)
-{
-    helper(['form', 'url']);
+            $db = \Config\Database::connect();
+            $ruangRapatModel = new RuangRapatModel();
 
-    $validationRules = [
-        'nama_ruangan' => 'required|string|max_length[255]',
-        'kapasitas'    => 'required|integer|greater_than[0]',
-        'layout_id'    => 'required',
-    ];
+            $ruangRapatModel->update($id, [
+                'nama_ruangan' => $nama_ruangan,
+                'kapasitas'    => $kapasitas,
+            ]);
 
-    if (!$this->validate($validationRules)) {
-        return redirect()->back()->with('errors', $this->validator->getErrors())->withInput();
+            $db->table('ruang_rapat_layout')->where('ruang_rapat_id', $id)->delete();
+
+            foreach ($layout_ids as $layout_id) {
+                $db->table('ruang_rapat_layout')->insert([
+                    'ruang_rapat_id' => $id,
+                    'layout_id'      => $layout_id,
+                ]);
+            }
+
+            return redirect()->to('/ruangrapat/list')->with('success', 'Data Ruang Rapat berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
-
-    $nama_ruangan = $this->request->getPost('nama_ruangan');
-    $kapasitas = $this->request->getPost('kapasitas');
-    $layout_ids = $this->request->getPost('layout_id');
-
-    $db = \Config\Database::connect();
-    $ruangRapatModel = new \App\Models\RuangRapatModel();
-
-    $ruangRapatModel->update($id, [
-        'nama_ruangan' => $nama_ruangan,
-        'kapasitas'    => $kapasitas,
-    ]);
-
-    $db->table('ruang_rapat_layout')->where('ruang_rapat_id', $id)->delete();
-
-    foreach ($layout_ids as $layout_id) {
-        $db->table('ruang_rapat_layout')->insert([
-            'ruang_rapat_id' => $id,
-            'layout_id'      => $layout_id,
-        ]);
-    }
-
-    return redirect()->to('/ruangrapat/list')->with('success', 'Data Ruang Rapat berhasil diperbarui.');
-}
-
 }

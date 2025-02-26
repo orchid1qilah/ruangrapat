@@ -50,4 +50,11 @@ $routes->post('/peminjaman/store', 'PeminjamanController::store');
 $routes->get('/peminjaman', 'PeminjamanController::index'); 
 $routes->get('/peminjaman/create', 'PeminjamanController::create');
 
+//Routes u antrian
+$routes->get('/antrian', 'AntrianController::index');
+$routes->get('antrian/change_status/(:num)/(:alpha)', 'AntrianController::change_status/$1/$2');
+$routes->get('antrian/filter', 'AntrianController::filter');
+
+
+
 $routes->setAutoRoute(false);

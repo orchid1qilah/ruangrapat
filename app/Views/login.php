@@ -86,7 +86,10 @@
             <option value="" selected disabled>Company</option>
             <option value="Company 1">Company 1</option>
             <option value="Company 2">Company 2</option>
-            <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
+            <option value="Company 1">Company 3</option>
+            <option value="Company 2">Company 4</option>
+            <option value="Company 1">Company 5</option>
+            <option value="Company 2">Company 6</option>
         </select>
     </div>
     <div class="d-grid">
@@ -94,7 +97,7 @@
     </div>
 </form>
 
-            <div class="footer">© 2024 Group of Manifacture</div>
+            <div class="footer">© 2025 Group of Manifacture</div>
         </div>
     </div>
 

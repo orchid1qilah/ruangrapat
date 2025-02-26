@@ -4,14 +4,14 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PeminjamanModel extends Model
+class AntrianModel extends Model
 {
     protected $table = 'peminjaman';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'ruang_rapat_id', 
+        'ruang_rapat_id',
+        'layout_id',
         'kapasitas',
-        'jumlah_peserta',
         'tanggal_peminjaman',
         'waktu_mulai',
         'waktu_selesai',
@@ -19,9 +19,9 @@ class PeminjamanModel extends Model
         'keterangan_acara',
         'konsumsi',
         'konsumsi_lain',
-        'layout_id',
-        'status'
-        
+        'jumlah_peserta',
+        'status',
+        'created_at',
+        'updated_at',
     ];
-    protected $useTimestamps = true;
 }

@@ -93,6 +93,7 @@
                     <th>Acara</th>
                     <th>Konsumsi</th>
                     <th>Layout</th>
+                    <th>status</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,6 +112,8 @@
                 <td><?= esc($item['acara']) ?> - <?= esc($item['keterangan_acara']) ?></td>
                 <td><?= esc($item['konsumsi']) ?: '-' ?></td>
                 <td><?= esc($item['nama_layout']) ?></td>
+                <td><?= esc($item['status']) ?></td>
+
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>

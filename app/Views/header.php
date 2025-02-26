@@ -106,7 +106,7 @@
                     <a href="<?= base_url('peminjaman'); ?>">Jadwal Peminjaman</a>
                 </div>
             </div>
-            <div class="nav-item">Antrian</div>
+            <a href="<?= base_url('antrian'); ?>"class="nav-item">Antrian</a>
             <div class="nav-item">Laporan</div>
             <div class="nav-item">
                 Master &#9662;
